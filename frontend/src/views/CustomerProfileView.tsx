@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import CustomerDetail from '../components/CustomerDetail';
+import KnowledgeBaseTools from '../components/KnowledgeBaseTools';
+import DeviceDashboard from '../components/DeviceDashboard';
+import CallControlInterface from '../components/CallControlInterface';
+import TicketTimeline from '../components/TicketTimeline';
+import MessageHistory from '../components/MessageHistory';
 
 interface CustomerProfileData {
   id: number;
@@ -19,7 +24,8 @@ const CustomerProfileView = () => {
   const [loading, setLoading] = useState(true);
   const [verificationStatus, setVerificationStatus] = useState(false);
   const [verificationTime, setVerificationTime] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'profile' | 'devices' | 'support'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'devices' | 'support' | 'agent-tools'>('profile');
+  const [activeToolTab, setActiveToolTab] = useState<'knowledge' | 'device' | 'call' | 'ticket' | 'message'>('knowledge');
 
   useEffect(() => {
     // Check if customer was verified
@@ -40,7 +46,7 @@ const CustomerProfileView = () => {
     
     // In a real app, fetch customer data from API
     // For demo, we'll use localStorage
-    const storedCustomer = localStorage.getItem('selectedCustomer');
+    const storedCustomer = localStorage.getItem('verifiedCustomer');
     
     if (storedCustomer) {
       const parsedCustomer = JSON.parse(storedCustomer);
@@ -149,6 +155,14 @@ const CustomerProfileView = () => {
               : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
           >
             Support History
+          </button>
+          <button
+            onClick={() => setActiveTab('agent-tools')}
+            className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'agent-tools' 
+              ? 'border-brand-accent text-brand-accent' 
+              : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+          >
+            Agent Tools
           </button>
         </nav>
       </div>
@@ -318,7 +332,12 @@ const CustomerProfileView = () => {
               <div className="flex justify-between text-xs text-gray-500">
                 <span>Ticket #T-10283</span>
                 <span>Created: 02/04/2025</span>
-                <span>Agent: Sam Batman</span>
+                <span className="flex items-center">
+                  <div className="h-5 w-5 rounded-full bg-brand-accent text-white flex items-center justify-center text-xs mr-1 overflow-hidden">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Sam" className="w-full h-full object-cover" />
+                  </div>
+                  Agent: Sam
+                </span>
               </div>
             </div>
             
@@ -381,6 +400,68 @@ const CustomerProfileView = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Agent Tools Tab Content */}
+      {activeTab === 'agent-tools' && (
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Agent Tools</h2>
+          
+          {/* Tool Navigation Tabs */}
+          <div className="mb-6 border-b border-gray-200">
+            <div className="flex space-x-4">
+              <button
+                onClick={() => setActiveToolTab('knowledge')}
+                className={`py-2 px-4 text-sm font-medium ${activeToolTab === 'knowledge' 
+                  ? 'bg-brand-accent text-white rounded-t-lg' 
+                  : 'text-gray-600 hover:text-brand-accent'}`}
+              >
+                Knowledge Base
+              </button>
+              <button
+                onClick={() => setActiveToolTab('device')}
+                className={`py-2 px-4 text-sm font-medium ${activeToolTab === 'device' 
+                  ? 'bg-brand-accent text-white rounded-t-lg' 
+                  : 'text-gray-600 hover:text-brand-accent'}`}
+              >
+                Device Dashboard
+              </button>
+              <button
+                onClick={() => setActiveToolTab('call')}
+                className={`py-2 px-4 text-sm font-medium ${activeToolTab === 'call' 
+                  ? 'bg-brand-accent text-white rounded-t-lg' 
+                  : 'text-gray-600 hover:text-brand-accent'}`}
+              >
+                Call Control
+              </button>
+              <button
+                onClick={() => setActiveToolTab('ticket')}
+                className={`py-2 px-4 text-sm font-medium ${activeToolTab === 'ticket' 
+                  ? 'bg-brand-accent text-white rounded-t-lg' 
+                  : 'text-gray-600 hover:text-brand-accent'}`}
+              >
+                Ticket Timeline
+              </button>
+              <button
+                onClick={() => setActiveToolTab('message')}
+                className={`py-2 px-4 text-sm font-medium ${activeToolTab === 'message' 
+                  ? 'bg-brand-accent text-white rounded-t-lg' 
+                  : 'text-gray-600 hover:text-brand-accent'}`}
+              >
+                Message History
+              </button>
+            </div>
+          </div>
+          
+          {/* Tool Content */}
+          <div className="mt-4">
+            {activeToolTab === 'knowledge' && <KnowledgeBaseTools />}
+            {activeToolTab === 'device' && <DeviceDashboard />}
+            {activeToolTab === 'call' && <CallControlInterface />}
+            {activeToolTab === 'ticket' && <TicketTimeline />}
+            {activeToolTab === 'message' && <MessageHistory />}
           </div>
         </div>
       )}

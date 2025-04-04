@@ -50,16 +50,24 @@ const CustomerVerificationView = () => {
     setLoading(false);
   }, [customerId]);
 
-  const handleVerify = (pin: string) => {
-    // In a real application, you would validate the PIN against the backend
-    // For demo purposes, we'll accept any PIN
-    console.log(`PIN provided for customer ${customer?.name}: ${pin}`);
+  const handleVerify = (verificationData: {
+    pin?: string;
+    verificationMethod: 'pin' | 'email' | 'phone' | 'security' | 'device';
+    securityAnswer?: string;
+    deviceSerial?: string;
+    verificationCode?: string;
+  }) => {
+    // In a real application, you would validate against the backend
+    console.log(`Customer ${customer?.name} verified using ${verificationData.verificationMethod} method`);
     
     // Store verification success in session
     localStorage.setItem('customerVerified', 'true');
     
     // Store the verification time
     localStorage.setItem('verificationTime', new Date().toISOString());
+    
+    // Store verification method used
+    localStorage.setItem('verificationMethod', verificationData.verificationMethod);
     
     // Make sure we preserve the viewType from customer data
     // If there's no customer data in verifiedCustomer already, store it now
@@ -162,6 +170,8 @@ const CustomerVerificationView = () => {
         {customer && (
           <CustomerVerification
             customerName={customer.name}
+            customerEmail={customer.email}
+            customerId={customer.id}
             onVerify={handleVerify}
             onCancel={() => {
               document.getElementById('verification-modal')?.classList.add('hidden');
