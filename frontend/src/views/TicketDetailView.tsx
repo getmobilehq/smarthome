@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import KnowledgeBase from '../components/KnowledgeBase/KnowledgeBase';
+import EmotionalIntelligenceAssistant from '../components/EmotionalIntelligenceAssistant/EmotionalIntelligenceAssistant';
+import TroubleshootingGuide from '../components/TroubleshootingGuide/TroubleshootingGuide';
 
 interface Ticket {
   id: string;
@@ -189,7 +192,9 @@ const TicketDetailView = () => {
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-7xl mx-auto"> 
+      <EmotionalIntelligenceAssistant />
+
       {/* Back button and ticket ID */}
       <div className="flex items-center mb-6">
         <button 
@@ -201,101 +206,84 @@ const TicketDetailView = () => {
           </svg>
           Back to Tickets
         </button>
-        <h1 className="text-2xl font-bold text-gray-900">Ticket {ticket.id}</h1>
-        
-        <div className="ml-auto space-x-2">
-          <button 
-            onClick={() => setShowEscalateModal(true)}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition-colors"
-          >
-            Escalate Ticket
-          </button>
-          <button className="bg-brand-accent hover:bg-opacity-90 text-white px-4 py-2 rounded-md transition-colors">
-            Resolve Ticket
-          </button>
-        </div>
+        <h1 className="text-2xl font-semibold text-gray-800">Ticket Details: {ticket.id}</h1>
       </div>
-      
-      {/* Ticket details and customer info */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="bg-brand-accent bg-opacity-10 px-6 py-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900">{ticket.subject}</h2>
-              <div className="flex flex-wrap gap-2 mt-2">
-                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
-                  {ticket.status}
-                </span>
-                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getPriorityColor(ticket.priority)}`}>
-                  {ticket.priority}
-                </span>
-                <span className="px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
-                  {ticket.category}
-                </span>
+
+      {/* Main content grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        {/* Left Column: Ticket Details & Interaction */}
+        <div className="md:col-span-2 space-y-6">
+          
+          {/* Ticket Information Card */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Created</h3>
+                <p className="text-sm text-gray-900">{ticket.createdAt}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Last Updated</h3>
+                <p className="text-sm text-gray-900">{ticket.lastUpdate}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Channel</h3>
+                <p className="text-sm text-gray-900">{ticket.channel}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Assigned Agent</h3>
+                <p className="text-sm text-gray-900">{ticket.assignedAgent}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Status</h3>
+                <p className={`text-sm text-gray-900 ${getStatusColor(ticket.status)}`}>{ticket.status}</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">Priority</h3>
+                <p className={`text-sm text-gray-900 ${getPriorityColor(ticket.priority)}`}>{ticket.priority}</p>
               </div>
             </div>
             
-            <div className="p-6">
-              <div className="mb-6">
-                <h3 className="text-sm font-medium text-gray-500 mb-2">Description</h3>
-                <p className="text-gray-900">{ticket.description}</p>
-              </div>
+            <div className="mb-6">
+              <h3 className="text-sm font-medium text-gray-500 mb-2">Description</h3>
+              <p className="text-gray-900">{ticket.description}</p>
+            </div>
+            
+            {/* Communication timeline */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-4">Communication History</h3>
               
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Created</h3>
-                  <p className="text-gray-900">{ticket.createdAt}</p>
+              <div className="space-y-6">
+                <div className="relative pl-8 pb-6 border-l-2 border-gray-200">
+                  <div className="absolute top-0 left-0 -translate-x-1/2 w-4 h-4 rounded-full bg-brand-accent"></div>
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-medium">Agent: {ticket.assignedAgent}</span>
+                      <span className="text-xs text-gray-500">Today, 10:30 AM</span>
+                    </div>
+                    <p className="text-gray-700 text-sm">I've reviewed your issue with the camera. Could you please check if the Wi-Fi network is working properly? Also, is the camera showing any lights?</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Last Updated</h3>
-                  <p className="text-gray-900">{ticket.lastUpdate}</p>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Channel</h3>
-                  <p className="text-gray-900">{ticket.channel}</p>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Assigned Agent</h3>
-                  <p className="text-gray-900">{ticket.assignedAgent}</p>
-                </div>
-              </div>
-              
-              {/* Communication timeline */}
-              <div>
-                <h3 className="text-sm font-medium text-gray-500 mb-4">Communication History</h3>
                 
-                <div className="space-y-6">
-                  <div className="relative pl-8 pb-6 border-l-2 border-gray-200">
-                    <div className="absolute top-0 left-0 -translate-x-1/2 w-4 h-4 rounded-full bg-brand-accent"></div>
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <span className="font-medium">Agent: {ticket.assignedAgent}</span>
-                        <span className="text-xs text-gray-500">Today, 10:30 AM</span>
-                      </div>
-                      <p className="text-gray-700 text-sm">I've reviewed your issue with the camera. Could you please check if the Wi-Fi network is working properly? Also, is the camera showing any lights?</p>
+                <div className="relative pl-8 pb-6 border-l-2 border-gray-200">
+                  <div className="absolute top-0 left-0 -translate-x-1/2 w-4 h-4 rounded-full bg-gray-300"></div>
+                  <div className="bg-blue-50 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-medium">Customer: {ticket.customer}</span>
+                      <span className="text-xs text-gray-500">Today, 9:45 AM</span>
                     </div>
+                    <p className="text-gray-700 text-sm">The camera has a solid blue light but doesn't appear in my app. I've checked my WiFi and it's working fine for other devices.</p>
                   </div>
-                  
-                  <div className="relative pl-8 pb-6 border-l-2 border-gray-200">
-                    <div className="absolute top-0 left-0 -translate-x-1/2 w-4 h-4 rounded-full bg-gray-300"></div>
-                    <div className="bg-blue-50 rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <span className="font-medium">Customer: {ticket.customer}</span>
-                        <span className="text-xs text-gray-500">Today, 9:45 AM</span>
-                      </div>
-                      <p className="text-gray-700 text-sm">The camera has a solid blue light but doesn't appear in my app. I've checked my WiFi and it's working fine for other devices.</p>
+                </div>
+                
+                <div className="relative pl-8">
+                  <div className="absolute top-0 left-0 -translate-x-1/2 w-4 h-4 rounded-full bg-gray-300"></div>
+                  <div className="bg-gray-100 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-medium">System</span>
+                      <span className="text-xs text-gray-500">Today, 9:30 AM</span>
                     </div>
-                  </div>
-                  
-                  <div className="relative pl-8">
-                    <div className="absolute top-0 left-0 -translate-x-1/2 w-4 h-4 rounded-full bg-gray-300"></div>
-                    <div className="bg-gray-100 rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-2">
-                        <span className="font-medium">System</span>
-                        <span className="text-xs text-gray-500">Today, 9:30 AM</span>
-                      </div>
-                      <p className="text-gray-700 text-sm">Ticket created via Email</p>
-                    </div>
+                    <p className="text-gray-700 text-sm">Ticket created via Email</p>
                   </div>
                 </div>
               </div>
@@ -331,95 +319,22 @@ const TicketDetailView = () => {
             </div>
           </div>
         </div>
-        
-        {/* Customer info sidebar */}
-        <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-              <h3 className="font-medium text-gray-900">Customer Information</h3>
-            </div>
-            
-            <div className="p-6">
-              <div className="flex items-center mb-6">
-                <div className="h-12 w-12 rounded-full bg-brand-accent bg-opacity-10 flex items-center justify-center text-brand-accent font-medium text-lg mr-4">
-                  {ticket.customer.charAt(0)}
-                </div>
-                <div>
-                  <h4 className="font-medium text-gray-900">{ticket.customer}</h4>
-                  <p className="text-sm text-gray-500">Premium Plan</p>
-                </div>
-              </div>
-              
-              <div className="space-y-4 mb-6">
-                <div>
-                  <h4 className="text-xs font-medium text-gray-500 mb-1">Email</h4>
-                  <p className="text-sm text-gray-900">customer@example.com</p>
-                </div>
-                <div>
-                  <h4 className="text-xs font-medium text-gray-500 mb-1">Phone</h4>
-                  <p className="text-sm text-gray-900">+1 (555) 123-4567</p>
-                </div>
-                <div>
-                  <h4 className="text-xs font-medium text-gray-500 mb-1">Customer Since</h4>
-                  <p className="text-sm text-gray-900">January 15, 2023</p>
-                </div>
-              </div>
-              
-              <div className="mb-6">
-                <h4 className="text-xs font-medium text-gray-500 mb-2">Recent Tickets</h4>
-                <div className="space-y-2">
-                  <div className="p-2 bg-gray-50 rounded-md">
-                    <p className="text-xs font-medium text-gray-900 mb-1">TCKT-001: Camera Offline</p>
-                    <p className="text-xs text-gray-500">Created: April 1, 2025</p>
-                  </div>
-                  <div className="p-2 bg-gray-50 rounded-md">
-                    <p className="text-xs font-medium text-gray-900 mb-1">TCKT-023: App Login Issues</p>
-                    <p className="text-xs text-gray-500">Created: March 15, 2025</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h4 className="text-xs font-medium text-gray-500 mb-2">Devices</h4>
-                <div className="space-y-2">
-                  <div className="p-2 bg-gray-50 rounded-md">
-                    <div className="flex justify-between">
-                      <p className="text-xs font-medium text-gray-900">Outdoor Camera</p>
-                      <span className="px-1.5 py-0.5 text-xs rounded-full bg-red-100 text-red-800">Offline</span>
-                    </div>
-                    <p className="text-xs text-gray-500">Last online: 24 hours ago</p>
-                  </div>
-                  <div className="p-2 bg-gray-50 rounded-md">
-                    <div className="flex justify-between">
-                      <p className="text-xs font-medium text-gray-900">Smart Hub</p>
-                      <span className="px-1.5 py-0.5 text-xs rounded-full bg-green-100 text-green-800">Online</span>
-                    </div>
-                    <p className="text-xs text-gray-500">Connected devices: 5</p>
-                  </div>
-                  <div className="p-2 bg-gray-50 rounded-md">
-                    <div className="flex justify-between">
-                      <p className="text-xs font-medium text-gray-900">Doorbell Pro</p>
-                      <span className="px-1.5 py-0.5 text-xs rounded-full bg-green-100 text-green-800">Online</span>
-                    </div>
-                    <p className="text-xs text-gray-500">Battery: 78%</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-6 flex justify-center">
-                <button 
-                  onClick={() => navigate(`/customer-profile/${ticket.customerId}`)}
-                  className="text-brand-accent hover:underline text-sm"
-                >
-                  View Full Customer Profile
-                </button>
-              </div>
-            </div>
+
+        {/* Right Column: Tools */}
+        <div className="md:col-span-1 relative"> 
+          
+          {/* In-flow Tools */}
+          <div className="space-y-6">
+             {/* Moved Troubleshooting Guide to top */}
+            <TroubleshootingGuide />
+            <KnowledgeBase />
+            {/* Removed EI Assistant from here */}
           </div>
         </div>
+
       </div>
-      
-      {/* Escalation Modal */}
+
+      {/* Escalate Modal */}
       {showEscalateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6">
