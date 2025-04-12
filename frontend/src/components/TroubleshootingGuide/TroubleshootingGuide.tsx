@@ -33,6 +33,46 @@ const flows = {
       { id: 6, text: 'Suggest restarting the Google Home/Nest device.' },
     ],
   },
+  'routine-not-working': {
+    title: 'Home Automation Routine Not Working',
+    steps: [
+      { id: 1, text: 'Ask customer to describe the routine: What should trigger it? What actions should happen?' },
+      { id: 2, text: 'Verify the trigger: If voice, check exact phrasing. If time, check device time zone. If device state, check the triggering device.' },
+      { id: 3, text: 'Check if the routine is enabled in the Google Home app (Automations tab).' },
+      { id: 4, text: 'Test the actions individually: Ask customer to manually control the devices/services involved in the routine.' },
+      { id: 5, text: 'Ensure all devices involved in actions are online and connected to the same Google Home structure.' },
+      { id: 6, text: 'If using Personal Routines, ensure the correct account (Voice Match) is triggering it.' },
+      { id: 7, text: 'Suggest simplifying the routine (fewer actions/triggers) for testing, then rebuild.' },
+      { id: 8, text: 'Restart the Google Home devices involved and the router.' },
+    ],
+  },
+  'firmware-update-issue': {
+    title: 'Firmware Update Issues',
+    steps: [
+      { id: 1, text: 'Ask customer: Is the update failing to start, getting stuck, or showing an error message?' },
+      { id: 2, text: 'Verify the device has a stable internet connection (check Wi-Fi signal strength if possible).' },
+      { id: 3, text: 'Ensure the device is plugged in or has sufficient battery charge for the update duration.' },
+      { id: 4, text: 'Guide customer to restart the smart device.' },
+      { id: 5, text: 'Guide customer to restart their Wi-Fi router.' },
+      { id: 6, text: 'Suggest moving the device closer to the router temporarily during the update.' },
+      { id: 7, text: 'Check the manufacturer\'s official website or status page for known firmware issues or outages.' },
+      { id: 8, text: 'If the update still fails, advise customer a factory reset might be needed (warn about data loss and reconfiguration required). Consult KB article KB-043 for details.' },
+    ],
+  },
+  // Added Hub Setup/Connectivity Flow (Req #26)
+  'hub-setup-issue': {
+    title: 'Hub Setup/Connectivity Issue',
+    steps: [
+      { id: 1, text: 'Confirm Hub is plugged in and showing power lights/screen activity.' },
+      { id: 2, text: 'Is the customer\'s phone/tablet connected to the same Wi-Fi network they intend to connect the hub to?' },
+      { id: 3, text: 'Verify Bluetooth is enabled on the phone/tablet (often used for initial discovery).' },
+      { id: 4, text: 'Is the Hub appearing for setup in the correct app (e.g., Google Home, Alexa)? If not, try restarting the hub and the app.' },
+      { id: 5, text: 'Check for Wi-Fi password typos during setup.' },
+      { id: 6, text: 'Ensure the customer is logged into the correct account within the app.' },
+      { id: 7, text: 'If connecting devices to the hub fails: Verify device compatibility with the hub (check KB-046).' },
+      { id: 8, text: 'Restart the hub, the device being connected, and the router.' },
+    ],
+  },
 };
 
 type FlowKey = keyof typeof flows;
@@ -92,6 +132,9 @@ const TroubleshootingGuide: React.FC = () => {
           <option value="device-offline">Device Offline</option>
           <option value="wifi-issue">Wi-Fi Connectivity Issues</option>
           <option value="google-assistant-voice">Google Assistant Voice Recognition Issues</option>
+          <option value="routine-not-working">Home Automation Routine Not Working</option>
+          <option value="firmware-update-issue">Firmware Update Issue</option>
+          <option value="hub-setup-issue">Hub Setup/Connectivity Issue</option>
           {/* Add more common issues here */}
         </select>
       </div>

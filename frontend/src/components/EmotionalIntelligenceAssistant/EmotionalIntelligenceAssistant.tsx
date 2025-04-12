@@ -74,7 +74,7 @@ const EmotionalIntelligenceAssistant: React.FC = () => {
     // Set interval (e.g., every hour)
     intervalRef.current = setInterval(() => {
       showWidget();
-    }, 15000); // 15 seconds for testing (intended: 3600000 for 1 hour)
+    }, 3600000); // 1 hour
 
     // Cleanup interval and timeout on unmount
     return () => {
